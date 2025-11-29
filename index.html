@@ -8,18 +8,17 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       margin: 0;
-      /* 預留底部固定區域的高度 */
-      padding: 12px 12px 120px;
-      background: #f8f1e7; /* 整體米色系背景 */
+      padding: 12px 12px 120px; /* 預留底部固定區域 */
+      background: #f8f1e7;
       font-size: 16px;
     }
     h1 {
-      font-size: 22px;
+      font-size: 23px;
       text-align: center;
       margin: 8px 0 4px;
     }
     .subtitle {
-      font-size: 13px;
+      font-size: 15px;
       text-align: center;
       color: #775f4a;
       margin-bottom: 8px;
@@ -27,7 +26,7 @@
     .section {
       max-width: 520px;
       margin: 0 auto 12px;
-      background: #fffaf3; /* 卡片偏白米色 */
+      background: #fffaf3;
       border-radius: 10px;
       padding: 10px;
       box-shadow: 0 2px 4px rgba(0,0,0,0.06);
@@ -49,7 +48,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: #f2d7a6; /* 大類較深米色 */
+      background: #f2d7a6;
       border-radius: 8px;
       color: #5b4126;
     }
@@ -66,7 +65,7 @@
       opacity: 0.7;
     }
     .cat-content {
-      background: #fff3dd; /* 展開內容較淺米色 */
+      background: #fff3dd;
       border-radius: 8px;
       margin-top: 4px;
       padding: 4px 8px 0;
@@ -120,13 +119,12 @@
       color: #4a3520;
     }
 
-    /* 底部固定的總金額 + 確認按鈕 */
     .footer {
       position: fixed;
       left: 0;
       right: 0;
       bottom: 0;
-      background: #f6deaf; /* 米色底部列 */
+      background: #f6deaf;
       box-shadow: 0 -2px 8px rgba(0,0,0,0.12);
       padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
       z-index: 100;
@@ -146,10 +144,11 @@
     .btn-primary {
       width: 100%;
       padding: 12px;
-      font-size: 16px;
+      font-size: 17px;
+      font-weight: 600;  
       border-radius: 8px;
       border: none;
-      background: #c86f30; /* 橘棕色 */
+      background: #c86f30;
       color: #fff;
       cursor: pointer;
     }
@@ -164,7 +163,6 @@
       margin-top: 4px;
     }
 
-    /* 確認畫面 */
     #confirm-view {
       display: none;
       max-width: 520px;
@@ -175,31 +173,31 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.06);
     }
     .order-title {
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 700;
       text-align: center;
       margin-bottom: 6px;
       color: #4a3520;
     }
     .order-subtitle {
-      font-size: 12px;
+      font-size: 16px;
       text-align: center;
       color: #7a6755;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
     }
     .order-total {
       margin-top: 8px;
       padding-top: 8px;
       border-top: 1px solid #4a3520;
       text-align: right;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
-      color: #4a3520;
+      color: #4d231f;
     }
     .order-note {
-      font-size: 11px;
+      font-size: 15px;
       color: #7a6755;
-      margin-top: 6px;
+      margin-top: 8px;
       text-align: center;
     }
     .order-back {
@@ -215,7 +213,6 @@
       cursor: pointer;
     }
 
-    /* 出單畫面：三欄對齊 */
     .order-item-row {
       display: flex;
       padding: 4px 0;
@@ -239,33 +236,33 @@
       font-weight: 700;
     }
 
-    /* 底部上方「已選品項」抽屜（方案 B） */
     .preview-drawer {
-        position: fixed;
-        left: 0;
-        right: 0;
-        bottom: 130px; /* 往上抬高，避免被總金額蓋住 */
-        z-index: 95;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 117px;
+      z-index: 95;
     }
-    
     .preview-drawer-inner {
       max-width: 520px;
       margin: 0 auto;
     }
     .preview-toggle {
-      width: 100%;
-      border-radius: 10px 10px 0 0;
-      border: none;
-      background: #f5e1b8; /* 淺米色 */
-      padding: 6px 10px;
+      width: 40%;
+      margin: 0 auto;
+      border-radius: 12px;              /* 全圓角 */
+      border: 2px solid #f4c27d;
+      background: #f6e0bc;
+      padding: 8px 12px;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 8px;
-      font-size: 13px;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
       box-shadow: 0 -1px 4px rgba(0,0,0,0.1);
-      color: #5b4126;
+      color: #4a3520;
     }
     .preview-handle {
       font-size: 16px;
@@ -276,12 +273,12 @@
     }
     .preview-content {
       background: #fffaf3;
-      max-height: 70vh; /* 展開約 70% 螢幕高 */
+      max-height: 70vh;
       overflow-y: auto;
       border-radius: 0 0 10px 10px;
       box-shadow: 0 2px 6px rgba(0,0,0,0.12);
       padding: 6px 10px 8px;
-      font-size: 14px;
+      font-size: 16px;
     }
     .preview-title {
       font-size: 14px;
@@ -319,18 +316,89 @@
     .preview-drawer.collapsed .preview-content {
       display: none;
     }
+
+    /* ===== 送出前確認視窗樣式 ===== */
+
+    .hidden {
+      display: none;
+    }
+
+    .confirm-dialog {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 300; /* 高於 footer & preview */
+    }
+    /* 新增這一段，必須放在 .confirm-dialog 後面 */
+.confirm-dialog.hidden {
+  display: none;
+}
+
+
+    .confirm-dialog-box {
+      width: 80%;
+      max-width: 360px;
+      background: #fffaf3;
+      border-radius: 12px;
+      padding: 16px 18px 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      text-align: center;
+      color: #4a3520;
+    }
+
+    .confirm-dialog-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .confirm-dialog-text {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #7a6755;
+      margin-bottom: 14px;
+    }
+
+    .confirm-dialog-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #c59b6c;
+      background: #fffaf3;
+      color: #704321;
+      cursor: pointer;
+    }
+
+    .btn-primary.small {
+      flex: 1;
+      width: auto;  /* 覆蓋原本 100% 寬 */
+      padding: 10px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
-  <h1>自助點餐</h1>
-  <div class="subtitle">選好餐點後按下方「確認」，再將畫面出示給櫃檯</div>
+  <h1>A-Bao house 金山店 自助點餐</h1>
+  <div id="top-notice" class="subtitle">
+  <span style="font-size: 17px; font-weight:700;">【僅供現場客人使用】</span><br>
+  點餐後按「確認」並出示給櫃檯付款；<br>
+  <span style="font-weight:700;">付款後才會開始製作餐點</span>
+</div>
 
-  <!-- 點餐畫面 -->
   <div id="order-view">
     <div class="section" id="menu"></div>
   </div>
 
-  <!-- 底部上方「已選品項」抽屜（可展開/收合） -->
   <div id="preview-drawer" class="preview-drawer collapsed" style="display:none;">
     <div class="preview-drawer-inner">
       <button id="preview-toggle" class="preview-toggle">
@@ -344,7 +412,6 @@
     </div>
   </div>
 
-  <!-- 底部固定的總金額與確認按鈕 -->
   <div class="footer">
     <div class="footer-inner">
       <div class="total">
@@ -356,22 +423,32 @@
     </div>
   </div>
 
-  <!-- 確認畫面（給櫃檯看的） -->
   <div id="confirm-view">
     <div class="order-title">訂單明細</div>
     <div class="order-subtitle">請將此畫面出示給櫃檯人員</div>
     <div id="order-summary"></div>
     <div class="order-total" id="order-total"></div>
-    <div class="order-note">※ 若需修改餐點，請點選「返回重新點餐」</div>
-    <div class="order-back">
-      <button id="back-btn" class="btn-ghost">返回重新點餐</button>
+    <div class="order-note">※ 若需修改點餐內容，請向櫃檯直接告知</div>
+  </div>
+
+  <!-- 送出前確認視窗 -->
+  <div id="confirm-dialog" class="confirm-dialog hidden">
+    <div class="confirm-dialog-box">
+      <div class="confirm-dialog-title">是否確認送出？</div>
+      <div class="confirm-dialog-text">
+        送出後請於 5 分鐘內至櫃檯確認餐點。
+      </div>
+      <div class="confirm-dialog-actions">
+        <button id="btn-dialog-cancel" class="btn-secondary">返回修改</button>
+        <button id="btn-dialog-ok" class="btn-primary small">確認送出</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // =========================
-    // 1. 菜單資料（已分分類）
-    // =========================
+    // 你的 Apps Script Web App URL
+    const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwP-2xPQNPeNMRihZ2Gy1fcxFiS-grPizu9PZiWxwP3kctaXMW8b1aShTDsskQeuDXi/exec";
+
     const menuData = [
       {
         category: "漢堡",
@@ -578,10 +655,6 @@
       }
     ];
 
-    // =========================
-    // 2. 畫面與互動邏輯
-    // =========================
-
     const menuEl = document.getElementById("menu");
     const totalEl = document.getElementById("total-amount");
     const confirmBtn = document.getElementById("confirm-btn");
@@ -597,8 +670,14 @@
     const previewToggleText = document.getElementById("preview-toggle-text");
     const previewToggleArrow = document.getElementById("preview-toggle-arrow");
     const previewList = document.getElementById("preview-list");
+    const footerEl = document.querySelector(".footer");
 
-    // 每個品項的數量
+    const topNotice = document.getElementById("top-notice");  // ← 新增在這裡！
+
+    const confirmDialog = document.getElementById("confirm-dialog");
+    const btnDialogOk = document.getElementById("btn-dialog-ok");
+    const btnDialogCancel = document.getElementById("btn-dialog-cancel");
+
     const qtyMap = {};
     menuData.forEach(cat => {
       cat.items.forEach(item => {
@@ -608,7 +687,6 @@
 
     function renderMenu() {
       menuEl.innerHTML = "";
-
       menuData.forEach(cat => {
         if (!cat.items || cat.items.length === 0) return;
 
@@ -685,7 +763,6 @@
       let total = 0;
       let hasItem = false;
       let itemCount = 0;
-
       previewList.innerHTML = "";
 
       menuData.forEach(cat => {
@@ -715,7 +792,6 @@
             row.appendChild(nameEl);
             row.appendChild(qtyEl);
             row.appendChild(subEl);
-
             previewList.appendChild(row);
           }
         });
@@ -737,60 +813,122 @@
       }
     }
 
-    previewToggle.addEventListener("click", () => {
-      const isCollapsed = previewDrawer.classList.toggle("collapsed");
-      // 收合狀態：顯示向上三角 ▲（表示可以上拉展開）
-      // 展開狀態：顯示向下三角 ▼（表示可以收起）
-      previewToggleArrow.textContent = isCollapsed ? "▲" : "▼";
-    });
-
-    confirmBtn.addEventListener("click", () => {
-      orderSummaryEl.innerHTML = "";
+    function buildOrderData() {
+      const items = [];
       let total = 0;
-
       menuData.forEach(cat => {
         cat.items.forEach(item => {
           const qty = qtyMap[item.id];
           if (qty > 0) {
             const lineAmount = item.price * qty;
             total += lineAmount;
-
-            const line = document.createElement("div");
-            line.className = "order-item-row";
-
-            const colName = document.createElement("div");
-            colName.className = "col-name";
-            colName.textContent = item.name;
-
-            const colCodeQty = document.createElement("div");
-            colCodeQty.className = "col-codeqty";
-            colCodeQty.textContent = item.code + "x" + qty;
-
-            const colPrice = document.createElement("div");
-            colPrice.className = "col-price";
-            colPrice.textContent = "$" + lineAmount;
-
-            line.appendChild(colName);
-            line.appendChild(colCodeQty);
-            line.appendChild(colPrice);
-
-            orderSummaryEl.appendChild(line);
+            items.push({
+              id: item.id,
+              name: item.name,
+              code: item.code,
+              price: item.price,
+              qty: qty,
+              lineAmount: lineAmount
+            });
           }
         });
       });
+      return {
+        orderId: "ORD_" + Date.now(),
+        createdAt: new Date().toISOString(),
+        items,
+        total
+      };
+    }
 
-      orderTotalEl.textContent = "總計：$" + total;
+    function sendOrderToSheet(orderData) {
+      // 使用 no-cors，只負責送資料，不處理回應
+      fetch(SHEET_WEBAPP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(orderData)
+      }).catch(err => {
+        console.error("送到 Sheet 發生錯誤（不影響前端使用）", err);
+      });
+    }
 
-      orderView.style.display = "none";
-      confirmView.style.display = "block";
-      window.scrollTo(0, 0);
+    function submitOrder() {
+  const orderData = buildOrderData();
+
+  // 更新畫面成「櫃檯用」訂單明細
+  orderSummaryEl.innerHTML = "";
+  orderData.items.forEach(item => {
+    const line = document.createElement("div");
+    line.className = "order-item-row";
+
+    const colName = document.createElement("div");
+    colName.className = "col-name";
+    colName.textContent = item.name;
+
+    const colCodeQty = document.createElement("div");
+    colCodeQty.className = "col-codeqty";
+    colCodeQty.textContent = item.code + "x" + item.qty;
+
+    const colPrice = document.createElement("div");
+    colPrice.className = "col-price";
+    colPrice.textContent = "$" + item.lineAmount;
+
+    line.appendChild(colName);
+    line.appendChild(colCodeQty);
+    line.appendChild(colPrice);
+    orderSummaryEl.appendChild(line);
+  });
+  orderTotalEl.textContent = "總計：$" + orderData.total;
+
+  // 切到櫃檯畫面
+  orderView.style.display = "none";
+  confirmView.style.display = "block";
+
+  // 隱藏上方「僅供現場客人使用」提示
+  topNotice.style.display = "none";
+
+  // 👉 這兩行：隱藏 drawer 與 footer
+  previewDrawer.style.display = "none";
+  footerEl.style.display = "none";
+
+  window.scrollTo(0, 0);
+
+  // 送到 Sheet（背景動作）
+  sendOrderToSheet(orderData);
+}
+
+
+    previewToggle.addEventListener("click", () => {
+      const isCollapsed = previewDrawer.classList.toggle("collapsed");
+      previewToggleArrow.textContent = isCollapsed ? "▲" : "▼";
     });
 
-    backBtn.addEventListener("click", () => {
-      confirmView.style.display = "none";
-      orderView.style.display = "block";
-      window.scrollTo(0, 0);
+    // 點「確認並顯示給櫃檯」→ 先打開確認視窗
+    confirmBtn.addEventListener("click", () => {
+      if (confirmBtn.disabled) return;
+      confirmDialog.classList.remove("hidden");
     });
+
+    // 確認視窗：返回修改
+    btnDialogCancel.addEventListener("click", () => {
+      confirmDialog.classList.add("hidden");
+    });
+
+    // 確認視窗：確認送出
+    btnDialogOk.addEventListener("click", () => {
+      confirmDialog.classList.add("hidden");
+      submitOrder();
+    });
+
+    /*
+backBtn.addEventListener("click", () => {
+  confirmView.style.display = "none";
+  orderView.style.display = "block";
+  footerEl.style.display = "block";
+  updateTotalAndPreview();
+  window.scrollTo(0, 0);
+});
+*/
 
     renderMenu();
     updateTotalAndPreview();
