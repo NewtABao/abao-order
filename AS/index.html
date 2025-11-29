@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>早餐店自助點餐</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 12px 12px 120px; /* 預留底部固定區域 */
+      background: #f8f1e7;
+      font-size: 16px;
+    }
+    h1 {
+      font-size: 23px;
+      text-align: center;
+      margin: 8px 0 4px;
+    }
+    .subtitle {
+      font-size: 15px;
+      text-align: center;
+      color: #775f4a;
+      margin-bottom: 8px;
+    }
+    .section {
+      max-width: 520px;
+      margin: 0 auto 12px;
+      background: #fffaf3;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    }
+    details {
+      border-bottom: 1px solid #ecd8b8;
+      padding: 4px 0;
+    }
+    details:last-child {
+      border-bottom: none;
+    }
+    summary {
+      list-style: none;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 700;
+      padding: 8px 10px;
+      margin: 4px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f2d7a6;
+      border-radius: 8px;
+      color: #5b4126;
+    }
+    summary::-webkit-details-marker {
+      display: none;
+    }
+    .summary-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .summary-icon {
+      font-size: 14px;
+      opacity: 0.7;
+    }
+    .cat-content {
+      background: #fff3dd;
+      border-radius: 8px;
+      margin-top: 4px;
+      padding: 4px 8px 0;
+    }
+    .item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+    .item + .item {
+      border-top: 1px dashed #e2caa4;
+    }
+    .item-info {
+      max-width: 60%;
+    }
+    .item-name {
+      font-size: 15px;
+      font-weight: 500;
+      color: #4a3520;
+    }
+    .item-meta {
+      font-size: 13px;
+      color: #7a6755;
+      margin-top: 2px;
+    }
+    .qty-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-qty {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid #c59b6c;
+      background: #fffaf3;
+      font-size: 20px;
+      line-height: 0;
+      cursor: pointer;
+      color: #704321;
+    }
+    .btn-qty:active {
+      transform: scale(0.95);
+      background: #f5e2c4;
+    }
+    .qty {
+      min-width: 24px;
+      text-align: center;
+      font-size: 15px;
+      color: #4a3520;
+    }
+
+    .footer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #f6deaf;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.12);
+      padding: 10px 12px calc(12px + env(safe-area-inset-bottom));
+      z-index: 100;
+    }
+    .footer-inner {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .total {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #4a3520;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      font-size: 17px;
+      font-weight: 600;  
+      border-radius: 8px;
+      border: none;
+      background: #c86f30;
+      color: #fff;
+      cursor: pointer;
+    }
+    .btn-primary:disabled {
+      background: #d8b897;
+      cursor: not-allowed;
+    }
+    .hint {
+      font-size: 11px;
+      color: #7a6755;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    #confirm-view {
+      display: none;
+      max-width: 520px;
+      margin: 0 auto 12px;
+      background: #fffaf3;
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+    }
+    .order-title {
+      font-size: 21px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 6px;
+      color: #4a3520;
+    }
+    .order-subtitle {
+      font-size: 16px;
+      text-align: center;
+      color: #7a6755;
+      margin-bottom: 10px;
+    }
+    .order-total {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #4a3520;
+      text-align: right;
+      font-size: 20px;
+      font-weight: 700;
+      color: #4d231f;
+    }
+    .order-note {
+      font-size: 15px;
+      color: #7a6755;
+      margin-top: 8px;
+      text-align: center;
+    }
+    .order-back {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .btn-ghost {
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      text-decoration: underline;
+      color: #c86f30;
+      cursor: pointer;
+    }
+
+    .order-item-row {
+      display: flex;
+      padding: 4px 0;
+      border-bottom: 1px dashed #dbc2a2;
+      font-size: 15px;
+      font-family: monospace;
+      color: #4a3520;
+    }
+    .col-name {
+      width: 45%;
+      text-align: left;
+    }
+    .col-codeqty {
+      width: 25%;
+      text-align: center;
+      font-weight: 600;
+    }
+    .col-price {
+      width: 30%;
+      text-align: right;
+      font-weight: 700;
+    }
+
+    .preview-drawer {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 117px;
+      z-index: 95;
+    }
+    .preview-drawer-inner {
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    .preview-toggle {
+      width: 40%;
+      margin: 0 auto;
+      border-radius: 12px;              /* 全圓角 */
+      border: 2px solid #f4c27d;
+      background: #f6e0bc;
+      padding: 8px 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 -1px 4px rgba(0,0,0,0.1);
+      color: #4a3520;
+    }
+    .preview-handle {
+      font-size: 16px;
+      line-height: 1;
+    }
+    .preview-toggle-text {
+      font-weight: 600;
+    }
+    .preview-content {
+      background: #fffaf3;
+      max-height: 70vh;
+      overflow-y: auto;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      padding: 6px 10px 8px;
+      font-size: 16px;
+    }
+    .preview-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #4a3520;
+    }
+    .preview-list {
+      border-top: 1px dashed #e2caa4;
+      margin-top: 4px;
+      padding-top: 4px;
+    }
+    .preview-row {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      padding: 4px 0;
+      border-bottom: 1px dashed #f0e0c3;
+      color: #4a3520;
+    }
+    .preview-name {
+      flex: 1 1 55%;
+      padding-right: 4px;
+    }
+    .preview-qty {
+      flex: 0 0 20%;
+      text-align: center;
+      font-weight: 600;
+    }
+    .preview-subtotal {
+      flex: 0 0 25%;
+      text-align: right;
+      font-weight: 600;
+    }
+    .preview-drawer.collapsed .preview-content {
+      display: none;
+    }
+
+    /* ===== 送出前確認視窗樣式 ===== */
+
+    .hidden {
+      display: none;
+    }
+
+    .confirm-dialog {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 300; /* 高於 footer & preview */
+    }
+    /* 新增這一段，必須放在 .confirm-dialog 後面 */
+.confirm-dialog.hidden {
+  display: none;
+}
+
+
+    .confirm-dialog-box {
+      width: 80%;
+      max-width: 360px;
+      background: #fffaf3;
+      border-radius: 12px;
+      padding: 16px 18px 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      text-align: center;
+      color: #4a3520;
+    }
+
+    .confirm-dialog-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .confirm-dialog-text {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #7a6755;
+      margin-bottom: 14px;
+    }
+
+    .confirm-dialog-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      padding: 10px;
+      font-size: 14px;
+      border-radius: 8px;
+      border: 1px solid #c59b6c;
+      background: #fffaf3;
+      color: #704321;
+      cursor: pointer;
+    }
+
+    .btn-primary.small {
+      flex: 1;
+      width: auto;  /* 覆蓋原本 100% 寬 */
+      padding: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>A-Bao house 金山店 自助點餐</h1>
+  <div id="top-notice" class="subtitle">
+  <span style="font-size: 17px; font-weight:700;">【僅供現場客人使用】</span><br>
+  點餐後按「確認」並出示給櫃檯付款；<br>
+  <span style="font-weight:700;">付款後才會開始製作餐點</span>
+</div>
+
+  <div id="order-view">
+    <div class="section" id="menu"></div>
+  </div>
+
+  <div id="preview-drawer" class="preview-drawer collapsed" style="display:none;">
+    <div class="preview-drawer-inner">
+      <button id="preview-toggle" class="preview-toggle">
+        <span class="preview-handle" id="preview-toggle-arrow">▲</span>
+        <span id="preview-toggle-text" class="preview-toggle-text">已選品項（0）</span>
+      </button>
+      <div id="preview-content" class="preview-content">
+        <div class="preview-title">已選品項</div>
+        <div class="preview-list" id="preview-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-inner">
+      <div class="total">
+        <span>總金額</span>
+        <span id="total-amount">$0</span>
+      </div>
+      <button id="confirm-btn" class="btn-primary" disabled>確認並顯示給櫃檯</button>
+      <div class="hint">※ 價格以現場公告為準，如有差異以店內為主</div>
+    </div>
+  </div>
+
+  <div id="confirm-view">
+    <div class="order-title">訂單明細</div>
+    <div class="order-subtitle">請將此畫面出示給櫃檯人員</div>
+    <div id="order-summary"></div>
+    <div class="order-total" id="order-total"></div>
+    <div class="order-note">※ 若需修改點餐內容，請向櫃檯直接告知</div>
+  </div>
+
+  <!-- 送出前確認視窗 -->
+  <div id="confirm-dialog" class="confirm-dialog hidden">
+    <div class="confirm-dialog-box">
+      <div class="confirm-dialog-title">是否確認送出？</div>
+      <div class="confirm-dialog-text">
+        送出後請於 5 分鐘內至櫃檯確認餐點。
+      </div>
+      <div class="confirm-dialog-actions">
+        <button id="btn-dialog-cancel" class="btn-secondary">返回修改</button>
+        <button id="btn-dialog-ok" class="btn-primary small">確認送出</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 你的 Apps Script Web App URL
+    const SHEET_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwP5-sJCoYewVjxMllosWKMOAfaHtGN33AvqzybsmMBskZ13E2BXAd_tRk5Mh6Rd85q/exec";
+
+    const menuData = [
+      {
+        category: "漢堡",
+        items: [
+          { id: "item_0",  name: "玉米蛋堡",           code: "玉堡",   price: 35 },
+          { id: "item_1",  name: "肉鬆蛋堡",           code: "ㄙㄨㄥ堡", price: 35 },
+          { id: "item_2",  name: "豬肉蛋堡",           code: "D堡",    price: 40 },
+          { id: "item_3",  name: "烤肉蛋堡",           code: "ㄎ堡",   price: 50 },
+          { id: "item_4",  name: "香雞蛋堡",           code: "香G堡",  price: 45 },
+          { id: "item_5",  name: "牛肉蛋堡",           code: "牛堡",   price: 45 },
+          { id: "item_6",  name: "總匯蛋堡",           code: "All堡",  price: 55 },
+          { id: "item_7",  name: "日式雞排蛋堡",       code: "日G堡",  price: 55 },
+          { id: "item_8",  name: "日式豬排蛋堡",       code: "日D堡",  price: 55 },
+          { id: "item_9",  name: "日式花枝排蛋堡",     code: "花枝堡", price: 55 },
+          { id: "item_10", name: "日式蝦排蛋堡",       code: "蝦排堡", price: 55 },
+          { id: "item_11", name: "美式雞腿（辣）蛋堡", code: "辛腿堡", price: 60 },
+          { id: "item_12", name: "美式雞腿（原）蛋堡", code: "元腿堡", price: 60 }
+        ]
+      },
+      {
+        category: "板燒吐司",
+        items: [
+          { id: "item_13", name: "煎蛋吐司",           code: "蛋土",   price: 30 },
+          { id: "item_14", name: "玉米蛋吐司",         code: "玉土",   price: 35 },
+          { id: "item_15", name: "肉鬆蛋吐司",         code: "ㄙㄨㄥ土", price: 35 },
+          { id: "item_16", name: "烤肉蛋吐司",         code: "ㄎ土",   price: 50 },
+          { id: "item_17", name: "香雞蛋吐司",         code: "香G土",  price: 40 },
+          { id: "item_18", name: "起司蛋吐司",         code: "7土",    price: 35 },
+          { id: "item_19", name: "總匯蛋吐司",         code: "All土",  price: 55 },
+          { id: "item_20", name: "火腿蛋吐司",         code: "火土",   price: 40 },
+          { id: "item_21", name: "培根蛋吐司",         code: "培土",   price: 40 },
+          { id: "item_22", name: "鮪魚蛋吐司",         code: "🐟土",    price: 45 },
+          { id: "item_23", name: "美式雞腿（辣）蛋吐司", code: "辛腿土", price: 60 },
+          { id: "item_24", name: "美式雞腿（原）蛋吐司", code: "元腿土", price: 60 }
+        ]
+      },
+      {
+        category: "美味蛋餅",
+        items: [
+          { id: "item_25", name: "原味蛋餅", code: "元P",   price: 25 },
+          { id: "item_26", name: "肉鬆蛋餅", code: "ㄙㄨㄥP", price: 35 },
+          { id: "item_27", name: "玉米蛋餅", code: "玉P",   price: 35 },
+          { id: "item_28", name: "起司蛋餅", code: "7P",    price: 35 },
+          { id: "item_29", name: "蔬食蛋餅", code: "才P",   price: 35 },
+          { id: "item_30", name: "洋蔥蛋餅", code: "洋P",   price: 35 },
+          { id: "item_31", name: "火腿蛋餅", code: "火P",   price: 40 },
+          { id: "item_32", name: "培根蛋餅", code: "培P",   price: 40 },
+          { id: "item_33", name: "熱狗蛋餅", code: "旺P",   price: 40 },
+          { id: "item_34", name: "鮪魚蛋餅", code: "🐟P",    price: 45 },
+          { id: "item_35", name: "烤肉蛋餅", code: "ㄎP",   price: 50 }
+        ]
+      },
+      {
+        category: "法式麵包",
+        items: [
+          { id: "item_36", name: "火腿起司法式麵包",   code: "火法包", price: 50 },
+          { id: "item_37", name: "蕃茄豬肉法式麵包",   code: "番D法包", price: 50 },
+          { id: "item_38", name: "苜蓿芽起司法式麵包", code: "苜法包",  price: 50 },
+          { id: "item_39", name: "陽光香雞法式麵包",   code: "香G法包", price: 50 },
+          { id: "item_40", name: "蔬食烤肉法式麵包",   code: "ㄎ法包",  price: 60 },
+          { id: "item_41", name: "日式燻雞法式麵包",   code: "燻雞法包", price: 65 }
+        ]
+      },
+      {
+        category: "起酥堡",
+        items: [
+          { id: "item_42", name: "草莓起酥堡",   code: "草起酥", price: 35 },
+          { id: "item_43", name: "洋芋蔬食起酥堡", code: "洋起酥", price: 40 },
+          { id: "item_44", name: "苜蓿芽玉米起酥堡", code: "苜起酥", price: 40 },
+          { id: "item_45", name: "蕃茄蔬食起酥堡", code: "番起酥", price: 40 },
+          { id: "item_46", name: "蔬食烤肉起酥堡", code: "烤起酥", price: 55 }
+        ]
+      },
+      {
+        category: "單點系列",
+        items: [
+          { id: "item_47", name: "荷包蛋（半熟）",   code: "半",       price: 15 },
+          { id: "item_48", name: "荷包蛋（全熟）",   code: "全",       price: 15 },
+          { id: "item_49", name: "熱狗（四條）",     code: "HG",      price: 30 },
+          { id: "item_50", name: "玉米濃湯（小）",   code: "湯",       price: 30 },
+          { id: "item_51", name: "玉米濃湯（大）",   code: "大湯",      price: 40 },
+          { id: "item_52", name: "薯餅（四片）",     code: "ㄕㄨˇ",    price: 40 },
+          { id: "item_53", name: "鍋貼",           code: "貼",       price: 35 },
+          { id: "item_54", name: "炒麵",           code: "ㄔ",       price: 35 },
+          { id: "item_55", name: "雞塊",           code: "GK",      price: 35 },
+          { id: "item_56", name: "蘿蔔糕",         code: "高",       price: 35 },
+          { id: "item_57", name: "胡麻鐵板麵",     code: "鐵（胡麻）", price: 40 },
+          { id: "item_58", name: "義響鐵板麵",     code: "鐵（白醬）", price: 50 },
+          { id: "item_59", name: "脆薯",           code: "脆薯",      price: 40 },
+          { id: "item_60", name: "美式湯麵",       code: "美湯",      price: 45 },
+          { id: "item_61", name: "烤肉炒麵",       code: "ㄎㄔ",      price: 55 }
+        ]
+      },
+      {
+        category: "日式穀堡",
+        items: [
+          { id: "item_62", name: "日式蔬食沙拉穀堡", code: "沙拉古", price: 40 },
+          { id: "item_63", name: "日式咖喱穀堡",     code: "咖喱古", price: 40 },
+          { id: "item_64", name: "冰州魚排穀堡",     code: "鱈魚古", price: 55 },
+          { id: "item_65", name: "孜然醬雞排穀堡",   code: "咖G古",  price: 55 },
+          { id: "item_66", name: "孜然醬豬排穀堡",   code: "咖D古",  price: 55 }
+        ]
+      },
+      {
+        category: "蔬食捲餅",
+        items: [
+          { id: "item_67", name: "香雞蕃茄捲餅",   code: "香G卷", price: 45 },
+          { id: "item_68", name: "黃金烤肉捲餅",   code: "ㄎ卷",  price: 55 },
+          { id: "item_69", name: "日式雞排捲餅",   code: "日G卷", price: 60 },
+          { id: "item_70", name: "海味花枝捲餅",   code: "花枝卷", price: 60 },
+          { id: "item_71", name: "鮮味蝦排捲餅",   code: "蝦排卷", price: 60 },
+          { id: "item_72", name: "原味美式雞腿捲餅", code: "元腿卷", price: 60 },
+          { id: "item_73", name: "辣味美式雞腿捲餅", code: "辛腿卷", price: 60 }
+        ]
+      },
+      {
+        category: "田園蔬果",
+        items: [
+          { id: "item_74", name: "馬鈴薯吐司",   code: "馬土",  price: 40 },
+          { id: "item_75", name: "全麥蔬食鮪魚", code: "全🐟",  price: 45 },
+          { id: "item_76", name: "全麥苜蓿芽火腿", code: "全苜火", price: 45 },
+          { id: "item_77", name: "全麥蔬菜沙拉", code: "全沙拉", price: 45 },
+          { id: "item_78", name: "田園蔬菜卷",   code: "才卷",  price: 45 }
+        ]
+      },
+      {
+        category: "厚片",
+        items: [
+          { id: "item_79", name: "起司奶油厚片", code: "7奶厚",  price: 35 },
+          { id: "item_80", name: "鮪魚洋蔥厚片", code: "🐟洋厚", price: 45 },
+          { id: "item_81", name: "燻雞起司厚片", code: "燻雞厚", price: 50 }
+        ]
+      },
+      {
+        category: "果醬系列",
+        items: [
+          { id: "item_82", name: "果醬厚片",   code: "果醬厚片", price: 30 },
+          { id: "item_87", name: "果醬吐司",   code: "果醬吐司", price: 25 },
+          { id: "item_88", name: "果醬起酥堡", code: "果醬起酥", price: 35 }
+        ]
+      },
+      {
+        category: "法國吐司",
+        items: [
+          { id: "item_83", name: "日式培根法國吐司", code: "培法土", price: 40 },
+          { id: "item_84", name: "深海鮪魚法國吐司", code: "🐟法土",  price: 45 },
+          { id: "item_85", name: "黃金烤肉法國吐司", code: "ㄎ法土", price: 50 },
+          { id: "item_86", name: "果醬法國吐司",   code: "果醬法土", price: 30 }
+        ]
+      },
+      {
+        category: "古早味豆漿",
+        items: [
+          { id: "item_89", name: "豆漿（中）",     code: "D",   price: 25 },
+          { id: "item_90", name: "豆漿（大）",     code: "大D",  price: 30 },
+          { id: "item_93", name: "紅茶豆漿（中）", code: "RD",  price: 25 },
+          { id: "item_94", name: "紅茶豆漿（大）", code: "大RD", price: 30 },
+          { id: "item_95", name: "薏仁漿（中）",   code: "E",   price: 35 },
+          { id: "item_96", name: "薏仁漿（大）",   code: "大E",  price: 40 }
+        ]
+      },
+      {
+        category: "純味茶",
+        items: [
+          { id: "item_91", name: "紅茶（中）", code: "R",  price: 25 },
+          { id: "item_92", name: "紅茶（大）", code: "大R", price: 30 },
+          { id: "item_97", name: "綠茶（中）", code: "G",  price: 25 },
+          { id: "item_98", name: "綠茶（大）", code: "大G", price: 30 },
+          { id: "item_99", name: "青茶（中）", code: "7",  price: 25 },
+          { id: "item_100", name: "青茶（大）", code: "大7", price: 30 }
+        ]
+      },
+      {
+        category: "鮮泡茶",
+        items: [
+          { id: "item_101", name: "東方美人", code: "東方", price: 40 },
+          { id: "item_102", name: "黃金烏龍", code: "烏龍", price: 40 },
+          { id: "item_103", name: "阿里山",   code: "阿里", price: 40 },
+          { id: "item_104", name: "玄米玉露", code: "玄米", price: 40 },
+          { id: "item_105", name: "四季綠茶", code: "四季", price: 40 }
+        ]
+      },
+      {
+        category: "奶茶",
+        items: [
+          { id: "item_106", name: "奶茶（中）", code: "M",   price: 30 },
+          { id: "item_107", name: "奶茶（大）", code: "大M",  price: 35 },
+          { id: "item_108", name: "奶綠（中）", code: "MG",  price: 30 },
+          { id: "item_109", name: "奶綠（大）", code: "大MG", price: 35 },
+          { id: "item_110", name: "青奶（中）", code: "7M",  price: 30 },
+          { id: "item_111", name: "青奶（大）", code: "大7M", price: 35 }
+        ]
+      },
+      {
+        category: "有料系列",
+        items: [
+          { id: "item_112", name: "胚芽奶茶（中）", code: "ㄆD",    price: 30 },
+          { id: "item_113", name: "胚芽奶茶（大）", code: "大ㄆD",   price: 35 },
+          { id: "item_114", name: "茶珠青奶（大）", code: "大 O 7M", price: 50 },
+          { id: "item_115", name: "茶珠青奶（中）", code: "O7M",    price: 40 },
+          { id: "item_116", name: "茶珠綠奶（大）", code: "大 O MG", price: 50 },
+          { id: "item_117", name: "茶珠綠奶（中）", code: "O MG",   price: 40 }
+        ]
+      }
+    ];
+
+    const menuEl = document.getElementById("menu");
+    const totalEl = document.getElementById("total-amount");
+    const confirmBtn = document.getElementById("confirm-btn");
+
+    const orderView = document.getElementById("order-view");
+    const confirmView = document.getElementById("confirm-view");
+    const orderSummaryEl = document.getElementById("order-summary");
+    const orderTotalEl = document.getElementById("order-total");
+    const backBtn = document.getElementById("back-btn");
+
+    const previewDrawer = document.getElementById("preview-drawer");
+    const previewToggle = document.getElementById("preview-toggle");
+    const previewToggleText = document.getElementById("preview-toggle-text");
+    const previewToggleArrow = document.getElementById("preview-toggle-arrow");
+    const previewList = document.getElementById("preview-list");
+    const footerEl = document.querySelector(".footer");
+
+    const topNotice = document.getElementById("top-notice");  // ← 新增在這裡！
+
+    const confirmDialog = document.getElementById("confirm-dialog");
+    const btnDialogOk = document.getElementById("btn-dialog-ok");
+    const btnDialogCancel = document.getElementById("btn-dialog-cancel");
+
+    const qtyMap = {};
+    menuData.forEach(cat => {
+      cat.items.forEach(item => {
+        qtyMap[item.id] = 0;
+      });
+    });
+
+    function renderMenu() {
+      menuEl.innerHTML = "";
+      menuData.forEach(cat => {
+        if (!cat.items || cat.items.length === 0) return;
+
+        const details = document.createElement("details");
+        const summary = document.createElement("summary");
+        const label = document.createElement("div");
+        label.className = "summary-label";
+        label.innerHTML = `<span>${cat.category}</span>`;
+        const icon = document.createElement("span");
+        icon.className = "summary-icon";
+        icon.textContent = "▾";
+        summary.appendChild(label);
+        summary.appendChild(icon);
+        details.appendChild(summary);
+
+        const catWrapper = document.createElement("div");
+        catWrapper.className = "cat-content";
+
+        cat.items.forEach(item => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "item";
+
+          const info = document.createElement("div");
+          info.className = "item-info";
+          info.innerHTML = `
+            <div class="item-name">${item.name}</div>
+            <div class="item-meta">$${item.price}</div>
+          `;
+
+          const control = document.createElement("div");
+          control.className = "qty-control";
+
+          const minusBtn = document.createElement("button");
+          minusBtn.className = "btn-qty";
+          minusBtn.textContent = "−";
+
+          const qtySpan = document.createElement("span");
+          qtySpan.className = "qty";
+          qtySpan.textContent = "0";
+
+          const plusBtn = document.createElement("button");
+          plusBtn.className = "btn-qty";
+          plusBtn.textContent = "+";
+
+          minusBtn.addEventListener("click", () => {
+            if (qtyMap[item.id] > 0) {
+              qtyMap[item.id]--;
+              qtySpan.textContent = qtyMap[item.id];
+              updateTotalAndPreview();
+            }
+          });
+
+          plusBtn.addEventListener("click", () => {
+            qtyMap[item.id]++;
+            qtySpan.textContent = qtyMap[item.id];
+            updateTotalAndPreview();
+          });
+
+          control.appendChild(minusBtn);
+          control.appendChild(qtySpan);
+          control.appendChild(plusBtn);
+
+          wrapper.appendChild(info);
+          wrapper.appendChild(control);
+          catWrapper.appendChild(wrapper);
+        });
+
+        details.appendChild(catWrapper);
+        menuEl.appendChild(details);
+      });
+    }
+
+    function updateTotalAndPreview() {
+      let total = 0;
+      let hasItem = false;
+      let itemCount = 0;
+      previewList.innerHTML = "";
+
+      menuData.forEach(cat => {
+        cat.items.forEach(item => {
+          const qty = qtyMap[item.id];
+          if (qty > 0) {
+            hasItem = true;
+            itemCount += qty;
+            const lineAmount = qty * item.price;
+            total += lineAmount;
+
+            const row = document.createElement("div");
+            row.className = "preview-row";
+
+            const nameEl = document.createElement("div");
+            nameEl.className = "preview-name";
+            nameEl.textContent = item.name;
+
+            const qtyEl = document.createElement("div");
+            qtyEl.className = "preview-qty";
+            qtyEl.textContent = "x" + qty;
+
+            const subEl = document.createElement("div");
+            subEl.className = "preview-subtotal";
+            subEl.textContent = "$" + lineAmount;
+
+            row.appendChild(nameEl);
+            row.appendChild(qtyEl);
+            row.appendChild(subEl);
+            previewList.appendChild(row);
+          }
+        });
+      });
+
+      totalEl.textContent = "$" + total;
+      confirmBtn.disabled = !hasItem;
+
+      if (hasItem) {
+        previewDrawer.style.display = "block";
+        previewToggleText.textContent = `已選品項（${itemCount}）`;
+      } else {
+        previewDrawer.style.display = "none";
+        previewToggleText.textContent = "已選品項（0）";
+        if (!previewDrawer.classList.contains("collapsed")) {
+          previewDrawer.classList.add("collapsed");
+          previewToggleArrow.textContent = "▲";
+        }
+      }
+    }
+
+    function buildOrderData() {
+      const items = [];
+      let total = 0;
+      menuData.forEach(cat => {
+        cat.items.forEach(item => {
+          const qty = qtyMap[item.id];
+          if (qty > 0) {
+            const lineAmount = item.price * qty;
+            total += lineAmount;
+            items.push({
+              id: item.id,
+              name: item.name,
+              code: item.code,
+              price: item.price,
+              qty: qty,
+              lineAmount: lineAmount
+            });
+          }
+        });
+      });
+      return {
+        orderId: "ORD_" + Date.now(),
+        createdAt: new Date().toISOString(),
+        items,
+        total
+      };
+    }
+
+    function sendOrderToSheet(orderData) {
+      // 使用 no-cors，只負責送資料，不處理回應
+      fetch(SHEET_WEBAPP_URL, {
+        method: "POST",
+        mode: "no-cors",
+        body: JSON.stringify(orderData)
+      }).catch(err => {
+        console.error("送到 Sheet 發生錯誤（不影響前端使用）", err);
+      });
+    }
+
+    function submitOrder() {
+  const orderData = buildOrderData();
+
+  // 更新畫面成「櫃檯用」訂單明細
+  orderSummaryEl.innerHTML = "";
+  orderData.items.forEach(item => {
+    const line = document.createElement("div");
+    line.className = "order-item-row";
+
+    const colName = document.createElement("div");
+    colName.className = "col-name";
+    colName.textContent = item.name;
+
+    const colCodeQty = document.createElement("div");
+    colCodeQty.className = "col-codeqty";
+    colCodeQty.textContent = item.code + "x" + item.qty;
+
+    const colPrice = document.createElement("div");
+    colPrice.className = "col-price";
+    colPrice.textContent = "$" + item.lineAmount;
+
+    line.appendChild(colName);
+    line.appendChild(colCodeQty);
+    line.appendChild(colPrice);
+    orderSummaryEl.appendChild(line);
+  });
+  orderTotalEl.textContent = "總計：$" + orderData.total;
+
+  // 切到櫃檯畫面
+  orderView.style.display = "none";
+  confirmView.style.display = "block";
+
+  // 隱藏上方「僅供現場客人使用」提示
+  topNotice.style.display = "none";
+
+  // 👉 這兩行：隱藏 drawer 與 footer
+  previewDrawer.style.display = "none";
+  footerEl.style.display = "none";
+
+  window.scrollTo(0, 0);
+
+  // 送到 Sheet（背景動作）
+  sendOrderToSheet(orderData);
+}
+
+
+    previewToggle.addEventListener("click", () => {
+      const isCollapsed = previewDrawer.classList.toggle("collapsed");
+      previewToggleArrow.textContent = isCollapsed ? "▲" : "▼";
+    });
+
+    // 點「確認並顯示給櫃檯」→ 先打開確認視窗
+    confirmBtn.addEventListener("click", () => {
+      if (confirmBtn.disabled) return;
+      confirmDialog.classList.remove("hidden");
+    });
+
+    // 確認視窗：返回修改
+    btnDialogCancel.addEventListener("click", () => {
+      confirmDialog.classList.add("hidden");
+    });
+
+    // 確認視窗：確認送出
+    btnDialogOk.addEventListener("click", () => {
+      confirmDialog.classList.add("hidden");
+      submitOrder();
+    });
+
+    /*
+backBtn.addEventListener("click", () => {
+  confirmView.style.display = "none";
+  orderView.style.display = "block";
+  footerEl.style.display = "block";
+  updateTotalAndPreview();
+  window.scrollTo(0, 0);
+});
+*/
+
+    renderMenu();
+    updateTotalAndPreview();
+  </script>
+</body>
+</html>
